@@ -1,0 +1,80 @@
+// 定义用户信息对象
+var userInfo = {
+  name: "",
+  gender: "",
+  age: 0,
+  height: 0,
+  weight: 0,
+  skinColor: "",
+  hairColor: "",
+  job: "",
+  hobbies: []
+};
+
+// 获取用户填写的个人信息
+function getUserInfo() {
+  // 通过DOM操作获取用户填写的信息
+  userInfo.name = document.getElementById("name").value;
+  userInfo.gender = document.getElementById("gender").value;
+  userInfo.age = parseInt(document.getElementById("age").value);
+  userInfo.height = parseInt(document.getElementById("height").value);
+  userInfo.weight = parseInt(document.getElementById("weight").value);
+  userInfo.skinColor = document.getElementById("skinColor").value;
+  userInfo.hairColor = document.getElementById("hairColor").value;
+  userInfo.job = document.getElementById("job").value;
+  userInfo.hobbies = Array.from(document.getElementsByName("hobbies[]")).filter(function (elem) { return elem.checked; }).map(function (elem) { return elem.value; });
+}
+
+// 将用户信息保存到本地存储
+function saveUserInfo() {
+  // 使用localStorage保存用户信息
+  localStorage.setItem("userInfo", JSON.stringify(userInfo));
+}
+
+// 从本地存储中获取用户信息
+function loadUserInfo() {
+  // 使用localStorage加载用户信息
+  var savedUserInfo = localStorage.getItem("userInfo");
+  if (savedUserInfo) {
+    userInfo = JSON.parse(savedUserInfo);
+  }
+}
+
+// 清除本地存储中的用户信息
+function clearUserInfo() {
+  // 使用localStorage清除用户信息
+  localStorage.removeItem("userInfo");
+}
+
+// 在页面加载完成后自动加载用户信息
+window.onload = function () {
+  loadUserInfo();
+  // 将用户信息填充到页面中
+  document.getElementById("name").value = userInfo.name;
+  document.getElementById("gender").value = userInfo.gender;
+  document.getElementById("age").value = userInfo.age;
+  document.getElementById("height").value = userInfo.height;
+  document.getElementById("weight").value = userInfo.weight;
+  document.getElementById("skinColor").value = userInfo.skinColor;
+  document.getElementById("hairColor").value = userInfo.hairColor;
+  document.getElementById("job").value = userInfo.job;
+  for (var i = 0; i < userInfo.hobbies.length; i++) {
+    var elem = document.getElementById("hobby_" + userInfo.hobbies[i]);
+    if (elem) {
+      elem.checked = true;
+    }
+  }
+};
+
+// 在用户点击保存按钮时保存用户信息
+document.getElementById("saveBtn").onclick = function () {
+  getUserInfo();
+  saveUserInfo();
+  alert("用户信息已保存！");
+};
+
+// 在用户点击清除按钮时清除用户信息
+document.getElementById("clearBtn").onclick = function () {
+  clearUserInfo();
+  alert("用户信息已清除！");
+};
